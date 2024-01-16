@@ -1,0 +1,84 @@
+﻿@model IEnumerable<WebApiUtils.Entities.DCarRentLinked>
+
+@{
+    ViewData["Title"] = "Car rent menu";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Car Rent menu</h1>
+
+    <a asp-area="" asp-controller="CarRent" asp-action="Create">Create</a> <br />
+
+    Count: @(Model.Count()) <br />
+
+    <table class="table">
+        <tr>
+            <td>
+                Id
+            </td>
+            <td>
+                Car
+            </td>
+            <td>
+                Client
+            </td>
+            <td>
+                Saler
+            </td>
+            <td>
+                RentDate
+            </td>
+            <td>
+                RentDays
+            </td>
+            <td>
+                ReturnDate
+            </td>
+            <td>
+                Penalty
+            </td>
+            <td>
+                Actions
+            </td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(item.Id)
+                </td>
+                <td>
+                    @(item.Car.Name)
+                </td>
+                <td>
+                    @(item.Client.Name)
+                </td>
+                <td>
+                    @(item.Saler.Name)
+                </td>
+                <td>
+                    @(item.OpenDate.ToShortDateString())
+                </td>
+                <td>
+                    @(item.RentDays)
+                </td>
+                <td>
+                    @(item.CloseDate?.ToShortDateString() ?? "--")
+                </td>
+                <td>
+                    @(item.Penalty?.ToString() ?? "--")
+                </td>
+                <td>
+                    @if (item.Penalty is null)
+                    {
+                        <a asp-area="" asp-controller="CarRent" asp-action="Close" asp-route-id="@(item.Id)">Close</a> <br />
+                    }
+                    else
+                    {
+                        @("--")
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<WebApiUtils.Entities.DCarLinked>
+
+@{
+    ViewData["Title"] = "Car menu";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Car menu</h1>
+
+    <a asp-area="" asp-controller="Car" asp-action="Create">Create</a> <br />
+
+    Count: @(Model.Count()) <br />
+
+    <table class="table">
+        <tr>
+            <td>
+                Id
+            </td>
+            <td>
+                Name
+            </td>
+            <td>
+                Brand
+            </td>
+            <td>
+                Model
+            </td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(item.Id)
+                </td>
+                <td>
+                    @(item.Name)
+                </td>
+                <td>
+                    @(item.Brand?.Name ?? "--")
+                </td>
+                <td>
+                    @(item.Model?.Name ?? "--")
+                </td>
+            </tr>
+        }
+    </table>
+</div>

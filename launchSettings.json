@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "identityserver": "StartDebugging",
+        "brandapi": "StartDebugging",
+        "carapi": "StartDebugging",
+        "carrentapi": "StartDebugging",
+        "clientapi": "StartDebugging",
+        "modelapi": "StartDebugging",
+        "salerapi": "StartDebugging",
+        "lising": "StartDebugging"
+      }
+    }
+  }
+}

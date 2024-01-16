@@ -1,0 +1,37 @@
+﻿@model CreateCarModel
+
+@{
+    ViewData["Title"] = "Create car";
+}
+
+@if (Model.ErrorText is not null)
+{
+    @(Model.ErrorText)
+}
+
+<form method="post" action="./create">
+
+    <label>Name</label>
+    <input name="name" type="text" value="@(Model.Name)" />
+
+    <label>Brand</label>
+    <select name="brandId">
+        <option value="">--</option>
+        @foreach (var brand in Model.Brands)
+        {
+            <option value="@(brand.Id)">@(brand.Name)</option>
+        }
+    </select>
+
+    <label>Model</label>
+    <select name="modelId">
+        <option value="">--</option>
+        @foreach (var model in Model.Models)
+        {
+            <option value="@(model.Id)">@(model.Name)</option>
+        }
+    </select>
+
+    <input type="submit" value="Create" />
+
+</form>

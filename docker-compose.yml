@@ -1,0 +1,146 @@
+version: '3.4'
+
+services:
+  # Front
+  lising:
+    image: ${DOCKER_REGISTRY-}lising
+    container_name: Lising
+    environment:
+      - AuthConnectionString=Server=sqlserver;Database=lising_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: Lising/Dockerfile
+    depends_on:
+        - sqlserver
+        - brandapi
+        - modelapi
+        - clientapi
+        - salerapi
+        - carapi
+        - carrentapi
+        - identityserver
+        
+  brandapi:
+    image: ${DOCKER_REGISTRY-}brandapi
+    container_name: brand_api
+    environment:
+      - ConnectionString=Server=sqlserver;Database=brand_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: BrandApi/Dockerfile 
+    ports:
+      - "6601:8081"
+    depends_on:
+        - sqlserver
+        - identityserver
+
+  modelapi:
+    image: ${DOCKER_REGISTRY-}modelapi
+    container_name: model_api
+    environment:
+      - ConnectionString=Server=sqlserver;Database=model_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: ModelApi/Dockerfile
+    ports:
+      - "6602:8081"
+    depends_on:
+        - sqlserver
+        - identityserver
+
+  clientapi:
+    image: ${DOCKER_REGISTRY-}clientapi
+    container_name: client_api
+    environment:
+      - ConnectionString=Server=sqlserver;Database=client_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: ClientApi/Dockerfile
+    ports:
+      - "6603:8081"
+    depends_on:
+        - sqlserver
+        - identityserver
+
+  salerapi:
+    image: ${DOCKER_REGISTRY-}salerapi
+    container_name: saler_api
+    environment:
+      - ConnectionString=Server=sqlserver;Database=saler_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: SalerApi/Dockerfile
+    ports:
+      - "6604:8081"
+    depends_on:
+        - sqlserver
+        - identityserver
+        
+  carapi:
+    image: ${DOCKER_REGISTRY-}carapi
+    container_name: car_api
+    environment:
+      - ConnectionString=Server=sqlserver;Database=car_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: CarApi/Dockerfile
+    ports:
+      - "6605:8081"
+    depends_on:
+        - sqlserver
+        - brandapi
+        - modelapi
+        - identityserver
+
+  carrentapi:
+    image: ${DOCKER_REGISTRY-}carrentapi
+    container_name: carrent_api
+    environment:
+      - ConnectionString=Server=sqlserver;Database=carrent_db;User Id=sa;Password=123456789qQ;Encrypt=False;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: CarRentApi/Dockerfile
+    ports:
+      - "6606:8081"
+    depends_on:
+        - sqlserver
+        - carapi
+        - clientapi
+        - salerapi
+        - identityserver
+
+  identityserver:
+    image: ${DOCKER_REGISTRY-}identityserver
+    container_name: identity_server
+    build:
+      context: .
+      dockerfile: IdentityServer/Dockerfile
+    ports:
+      - "6607:8081"
+ 
+  # Rabbit
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 6608:15672
+      - 6609:5672
+
+  # DB
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - SA_PASSWORD=123456789qQ
+      - ACCEPT_EULA=Y
+    ports:
+      - "5533:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
